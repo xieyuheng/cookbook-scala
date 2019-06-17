@@ -1,4 +1,4 @@
-# akka (actor model) practice
+# instar3 -- akka (actor model) practice
 
 ## Contributing
 
