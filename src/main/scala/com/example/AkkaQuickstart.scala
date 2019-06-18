@@ -8,17 +8,24 @@ import akka.actor.{
   Props,
 }
 
+// companion object
+
 object Greeter {
+  // It is also a common pattern to use a props method in the companion object
+  //   that describes how to construct the Actor.
   def props(
     message: String,
-    printerActor: ActorRef,
+    printerActor: ActorRef
   ): Props = Props(new Greeter(message, printerActor))
 
-  final case class WhoToGreet(who: String)
+  case class WhoToGreet(who: String)
   case object Greet
 }
 
-class Greeter(message: String, printerActor: ActorRef) extends Actor {
+class Greeter(
+  message: String,
+  printerActor: ActorRef,
+) extends Actor {
   import Greeter._
   import Printer._
 
