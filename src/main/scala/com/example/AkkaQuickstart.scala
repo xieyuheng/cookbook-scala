@@ -8,26 +8,22 @@ import akka.actor.{
   Props,
 }
 
-// companion object
+
+// use companion object to define messages of an actor
 
 object Greeter {
-  // It is also a common pattern to use a props method in the companion object
-  //   that describes how to construct the Actor.
+  // use a props method in the companion object construct the actor
   def props(
     message: String,
-    printerActor: ActorRef
-  ): Props = Props(new Greeter(message, printerActor))
+    printer: ActorRef
+  ): Props = Props(new Greeter(message, printer))
 
   case class WhoToGreet(who: String)
   case object Greet
 }
 
-class Greeter(
-  message: String,
-  printerActor: ActorRef,
-) extends Actor {
+class Greeter(message: String, printer: ActorRef) extends Actor {
   import Greeter._
-  import Printer._
 
   var greeting = ""
 
@@ -35,13 +31,13 @@ class Greeter(
     case WhoToGreet(who) =>
       greeting = message + ", " + who
     case Greet =>
-      printerActor ! Greeting(greeting)
+      printer ! Printer.Greeting(greeting)
   }
 }
 
 object Printer {
   def props: Props = Props[Printer]
-  final case class Greeting(greeting: String)
+  case class Greeting(greeting: String)
 }
 
 class Printer extends Actor with ActorLogging {
@@ -56,13 +52,13 @@ class Printer extends Actor with ActorLogging {
 object AkkaQuickstart extends App {
   import Greeter._
 
-  val system: ActorSystem = ActorSystem("helloAkka")
+  val system = ActorSystem("helloAkka")
 
-  val printer: ActorRef = system.actorOf(Printer.props, "printerActor")
+  val printer = system.actorOf(Printer.props, "printer")
 
-  val howdyGreeter: ActorRef = system.actorOf(Greeter.props("Howdy", printer), "howdyGreeter")
-  val helloGreeter: ActorRef = system.actorOf(Greeter.props("Hello", printer), "helloGreeter")
-  val goodDayGreeter: ActorRef = system.actorOf(Greeter.props("Good day", printer), "goodDayGreeter")
+  val howdyGreeter = system.actorOf(Greeter.props("Howdy", printer), "howdyGreeter")
+  val helloGreeter = system.actorOf(Greeter.props("Hello", printer), "helloGreeter")
+  val goodDayGreeter = system.actorOf(Greeter.props("Good day", printer), "goodDayGreeter")
 
   howdyGreeter ! WhoToGreet("Akka")
   howdyGreeter ! Greet
@@ -74,5 +70,7 @@ object AkkaQuickstart extends App {
   helloGreeter ! Greet
 
   goodDayGreeter ! WhoToGreet("Play")
+  goodDayGreeter ! Greet
+  goodDayGreeter ! Greet
   goodDayGreeter ! Greet
 }
