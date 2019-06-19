@@ -1,6 +1,7 @@
 package com.example
 
 import akka.actor.{ Actor, ActorRef, ActorLogging, Props }
+import scala.concurrent.duration._
 
 /*
  * A group of devices in one home.
@@ -11,6 +12,15 @@ object DeviceGroup {
 
   case class RequestDeviceIds(requestId: Long)
   case class ReplyDeviceIds(requestId: Long, deviceIds: Set[String])
+
+  case class RequestAllTemperatures(requestId: Long)
+  case class RespondAllTemperatures(requestId: Long, temperatures: Map[String, TemperatureReading])
+
+  trait TemperatureReading
+  case class Temperature(value: Double) extends TemperatureReading
+  case object TemperatureNotAvailable extends TemperatureReading
+  case object DeviceNotAvailable extends TemperatureReading
+  case object DeviceTimedOut extends TemperatureReading
 }
 
 class DeviceGroup(groupId: String) extends Actor with ActorLogging {
@@ -58,5 +68,13 @@ class DeviceGroup(groupId: String) extends Actor with ActorLogging {
     case RequestDeviceIds(requestId) =>
       val deviceIds = deviceMap.keySet
       sender() ! ReplyDeviceIds(requestId, deviceIds)
+
+    case RequestAllTemperatures(requestId) =>
+      context.actorOf(
+        DeviceGroupQuery.props(
+          deviceIdMap = deviceIdMap,
+          requestId = requestId,
+          requester = sender(),
+          timeout = 3.seconds))
   }
 }

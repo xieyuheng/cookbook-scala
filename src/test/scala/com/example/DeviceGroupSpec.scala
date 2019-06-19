@@ -102,4 +102,37 @@ class DeviceGroupSpec(_system: ActorSystem)
       probe.expectMsg(DeviceGroup.ReplyDeviceIds(requestId = 1, Set("device2")))
     }
   }
+
+  "be able to collect temperatures from all active devices" in {
+    val probe = TestProbe()
+    val group = system.actorOf(DeviceGroup.props("group"))
+
+    group.tell(DeviceManager.RequestTrackDevice("group", "device1"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+    val device1 = probe.lastSender
+
+    group.tell(DeviceManager.RequestTrackDevice("group", "device2"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+    val device2 = probe.lastSender
+
+    group.tell(DeviceManager.RequestTrackDevice("group", "device3"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+    val device3 = probe.lastSender
+
+    // Check that the device actors are working
+    device1.tell(Device.RecordTemperature(requestId = 0, 1.0), probe.ref)
+    probe.expectMsg(Device.TemperatureRecorded(requestId = 0))
+    device2.tell(Device.RecordTemperature(requestId = 1, 2.0), probe.ref)
+    probe.expectMsg(Device.TemperatureRecorded(requestId = 1))
+    // No temperature for device3
+
+    group.tell(DeviceGroup.RequestAllTemperatures(requestId = 0), probe.ref)
+    probe.expectMsg(
+      DeviceGroup.RespondAllTemperatures(
+        requestId = 0,
+        temperatures = Map(
+          "device1" -> DeviceGroup.Temperature(1.0),
+          "device2" -> DeviceGroup.Temperature(2.0),
+          "device3" -> DeviceGroup.TemperatureNotAvailable)))
+  }
 }
