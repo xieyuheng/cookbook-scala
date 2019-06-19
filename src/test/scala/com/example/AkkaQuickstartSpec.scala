@@ -16,7 +16,7 @@ class AkkaQuickstartSpec(_system: ActorSystem)
 
   def this() = this(ActorSystem("AkkaQuickstartSpec"))
 
-  override def afterAll: Unit = {
+  override def afterAll = {
     shutdown(system)
   }
 
