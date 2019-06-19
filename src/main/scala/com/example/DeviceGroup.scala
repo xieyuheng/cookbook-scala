@@ -70,8 +70,14 @@ class DeviceGroup(groupId: String) extends Actor with ActorLogging {
       sender() ! ReplyDeviceIds(requestId, deviceIds)
 
     case RequestAllTemperatures(requestId) =>
+      // context.actorOf(
+      //   DeviceGroupQuery.props(
+      //     deviceIdMap = deviceIdMap,
+      //     requestId = requestId,
+      //     requester = sender(),
+      //     timeout = 3.seconds))
       context.actorOf(
-        DeviceGroupQuery.props(
+        DeviceGroupQueryNatural.props(
           deviceIdMap = deviceIdMap,
           requestId = requestId,
           requester = sender(),
