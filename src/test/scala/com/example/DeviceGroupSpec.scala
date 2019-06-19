@@ -61,4 +61,45 @@ class DeviceGroupSpec(_system: ActorSystem)
 
     device1 should ===(device2)
   }
+
+  "be able to list active devices" in {
+    val probe = TestProbe()
+    val group = system.actorOf(DeviceGroup.props("group"))
+
+    group.tell(DeviceManager.RequestTrackDevice("group", "device1"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+
+    group.tell(DeviceManager.RequestTrackDevice("group", "device2"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+
+    group.tell(DeviceGroup.RequestDeviceIds(requestId = 0), probe.ref)
+    probe.expectMsg(DeviceGroup.ReplyDeviceIds(requestId = 0, Set("device1", "device2")))
+  }
+
+  "be able to list active devices after one shuts down" in {
+    val probe = TestProbe()
+    val group = system.actorOf(DeviceGroup.props("group"))
+
+    group.tell(DeviceManager.RequestTrackDevice("group", "device1"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+
+    val toShutDown = probe.lastSender
+
+    group.tell(DeviceManager.RequestTrackDevice("group", "device2"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+
+    group.tell(DeviceGroup.RequestDeviceIds(requestId = 0), probe.ref)
+    probe.expectMsg(DeviceGroup.ReplyDeviceIds(requestId = 0, Set("device1", "device2")))
+
+    probe.watch(toShutDown)
+    toShutDown ! akka.actor.PoisonPill
+    probe.expectTerminated(toShutDown)
+
+    // using awaitAssert to retry because it might take longer for the group
+    // to see the Terminated, that order is undefined
+    probe.awaitAssert {
+      group.tell(DeviceGroup.RequestDeviceIds(requestId = 1), probe.ref)
+      probe.expectMsg(DeviceGroup.ReplyDeviceIds(requestId = 1, Set("device2")))
+    }
+  }
 }
