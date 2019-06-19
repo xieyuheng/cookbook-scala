@@ -35,7 +35,8 @@ class Greeter(message: String, printer: ActorRef) extends Actor {
 }
 
 object Printer {
-  def props = Props[Printer]
+  // def props = Props[Printer]
+  def props = Props (new Printer)
   case class Greeting(greeting: String)
 }
 

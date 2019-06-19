@@ -22,13 +22,13 @@ class AkkaQuickstartSpec(_system: ActorSystem)
 
   "A Greeter Actor" should {
     "pass on a greeting message when instructed to" in {
-      val testProbe = TestProbe()
+      val probe = TestProbe()
       val helloGreetingMessage = "hello"
-      val helloGreeter = system.actorOf(Greeter.props(helloGreetingMessage, testProbe.ref))
+      val helloGreeter = system.actorOf(Greeter.props(helloGreetingMessage, probe.ref))
       val greetPerson = "Akka"
       helloGreeter ! WhoToGreet(greetPerson)
       helloGreeter ! Greet
-      testProbe.expectMsg(500 millis, Greeting(helloGreetingMessage + ", " + greetPerson))
+      probe.expectMsg(500 millis, Greeting(helloGreetingMessage + ", " + greetPerson))
     }
   }
 }

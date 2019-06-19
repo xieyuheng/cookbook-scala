@@ -3,7 +3,10 @@ package com.example
 import akka.actor.{ Actor, ActorLogging, Props }
 
 object Device {
-  def props(groupId: String, deviceId: String): Props = Props(new Device(groupId, deviceId))
+  def props(groupId: String, deviceId: String) = Props(new Device(groupId, deviceId))
+
+  case class RecordTemperature(requestId: Long, value: Double )
+  case class TemperatureRecorded(requestId: Long)
 
   case class ReadTemperature(requestId: Long)
   case class RespondTemperature(requestId: Long, value: Option[Double])
@@ -20,5 +23,9 @@ class Device(groupId: String, deviceId: String) extends Actor with ActorLogging 
   def receive = {
     case ReadTemperature(id) =>
       sender() ! RespondTemperature(id, lastTemperatureReading)
+    case RecordTemperature(id, value) =>
+      log.info("Recorded temperature reading {} with {}", value, id)
+      lastTemperatureReading = Some (value)
+      sender() ! TemperatureRecorded(id)
   }
 }
