@@ -5,8 +5,6 @@ import akka.actor.ActorSystem
 import akka.testkit.{ TestKit, TestProbe }
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import Greeter._
-import Printer._
 
 class AkkaQuickstartSpec(_system: ActorSystem)
     extends TestKit(_system)
@@ -25,10 +23,12 @@ class AkkaQuickstartSpec(_system: ActorSystem)
       val probe = TestProbe()
       val helloGreetingMessage = "hello"
       val helloGreeter = system.actorOf(Greeter.props(helloGreetingMessage, probe.ref))
-      val greetPerson = "Akka"
-      helloGreeter ! WhoToGreet(greetPerson)
-      helloGreeter ! Greet
-      probe.expectMsg(500 millis, Greeting(helloGreetingMessage + ", " + greetPerson))
+      val name = "Akka"
+      helloGreeter ! Greeter.WhoToGreet(name)
+      helloGreeter ! Greeter.Greet
+      probe.expectMsg(
+        500.milliseconds,
+        Printer.Greeting(helloGreetingMessage + ", " + name))
     }
   }
 }

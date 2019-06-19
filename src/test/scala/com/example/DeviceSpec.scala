@@ -5,7 +5,6 @@ import akka.actor.ActorSystem
 import akka.testkit.{ TestKit, TestProbe }
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import Device._
 
 class DeviceSpec(_system: ActorSystem)
     extends TestKit(_system)
@@ -62,5 +61,25 @@ class DeviceSpec(_system: ActorSystem)
       res.requestId should ===(4L)
       res.value should ===(Some(55.0))
     }
+  }
+
+  "reply to registration requests" in {
+    val probe = TestProbe()
+    val device = system.actorOf(Device.props("group", "device"))
+
+    device.tell(DeviceManager.RequestTrackDevice("group", "device"), probe.ref)
+    probe.expectMsg(DeviceManager.DeviceRegistered)
+    probe.lastSender should ===(device)
+  }
+
+  "ignore wrong registration requests" in {
+    val probe = TestProbe()
+    val device = system.actorOf(Device.props("group", "device"))
+
+    device.tell(DeviceManager.RequestTrackDevice("wrongGroup", "device"), probe.ref)
+    probe.expectNoMessage(500.milliseconds)
+
+    device.tell(DeviceManager.RequestTrackDevice("group", "Wrongdevice"), probe.ref)
+    probe.expectNoMessage(500.milliseconds)
   }
 }
