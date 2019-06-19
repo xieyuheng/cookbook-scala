@@ -5,9 +5,9 @@ import scala.concurrent.duration._
 
 /*
  * A verb can also be implemented as actor.
- * An actor can represents a process or a task rather than an object,
+ * An actor can represent a process or a task rather than an object,
  *   or we can say we are viewing a verb as a noun,
- *   or we can view these kind of actors as works.
+ *   or we can view these kind of actors as workers.
 
  * We will create an actor that represents a single query
  * and that performs the tasks needed to complete the query on behalf of the group actor.
