@@ -8,7 +8,6 @@ import akka.actor.{
   Props,
 }
 
-
 // use companion object to define messages of an actor
 
 object Greeter {
