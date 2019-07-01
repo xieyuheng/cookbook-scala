@@ -25,6 +25,8 @@
 
     1. create more actors
     2. send message to addresses
+       - <person> ! <message>
+         the use of `!` is like getting person's attention
     3. decide what to do with the next message it receives
 
   - *Indeterminacy*
@@ -71,25 +73,112 @@
       - thus a type system of such model must be very expressive
       - the logic of the type system would be very different
 
-* supervision & error handling
+* actor system
 
-* tree of actors
+  - object oriented implementation of actor model
 
-  - use unix file system path
-    to refer to actors in the tree
+  - An ActorSystem is a heavyweight structure
+    that will allocate 1…N Threads,
+    so create one per logical application.
+
+* hierarchical structure of actor system
+
+  - tree of actors
+    - use unix file system path
+      to refer to actors in the tree
+    - system of actors
+      /<name>/system/
+      /<name>/user/
+      /<name>/user/<supervisor>/
+
+  - designing such a system is to decide
+    who should supervise what:
+    - If one actor manages the work another actor is doing,
+      e.g. by passing on sub-tasks,
+      then the manager should supervise the child.
+      The reason is that the manager knows
+      which kind of failures are expected and how to handle them.
+    - If one actor carries very important data
+      (i.e. its state shall not be lost if avoidable),
+      this actor should source out
+      any possibly dangerous sub-tasks to children it supervises
+      and handle failures of these children as appropriate.
+      Depending on the nature of the requests,
+      it may be best to create a new child for each request,
+      which simplifies state management for collecting the replies.
+      This is known as the "Error Kernel Pattern" from Erlang.
+    - If one actor depends on another actor
+      for carrying out its duty,
+      it should watch that other actor’s liveness
+      and act upon receiving a termination notice.
+      This is different from supervision,
+      as the watching party has no influence
+      on the supervisor strategy,
+      and it should be noted that a functional dependency alone
+      is not a criterion for deciding
+      where to place a certain child actor in the hierarchy.
+
+  - supervision & error handling
+    the supervisor delegates tasks to subordinates
+    and therefore must respond to their failures.
+    When a subordinate detects a failure (i.e. throws an exception),
+    it suspends itself and all its subordinates
+    and sends a message to its supervisor, signaling failure.
+    Depending on the nature of the work to be supervised
+    and the nature of the failure,
+    the supervisor has a choice of the following four options:
+    - Resume the subordinate,
+      keeping its accumulated internal state
+    - Restart the subordinate,
+      clearing out its accumulated internal state
+    - Stop the subordinate permanently
+    - Escalate the failure, thereby failing itself
+
+* actor best practices
+
+  - Actors should be like nice co-workers:
+    do their job efficiently
+    without bothering everyone else needlessly
+    and avoid hogging resources.
+    Translated to programming this means
+    to process events and generate responses (or more requests)
+    in an event-driven manner.
+
+  - Do not pass mutable objects between actors.
+
+  - Do not pass closures between actors.
+
+  - Not to much top-level actors.
+    Maybe you only need one.
+
+* actor in akka
+
+  - An actor is a container for
+    Behavior, a Mailbox,
+    State,
+    Child Actors and a Supervisor Strategy.
+
+  - explicit lifecycle (no GC)
+
+  - All of this is encapsulated behind an Actor Reference.
+    - restarting an actor
+      without needing to update references elsewhere,
+    - placing the actual actor object on remote hosts,
+    - sending messages to actors
+      in completely different applications.
+
+  - Because the internal state is vital to an actor's operations,
+    having inconsistent state is fatal.
+    Thus, when the actor fails and is restarted by its supervisor,
+    the state will be created from scratch,
+    like upon first creating the actor.
+    This is to enable the ability of self-healing of the system.
+
+  - Optionally, an actor’s state can be automatically recovered
+    to the state before a restart by persisting received messages
+    and replaying them after restart.
 
 * akka -- toppings on the cake
-
-  - <person> ! <message>
-    the use of `!` is like getting person's attention
-
-  - the use of "companion object" design pattern
-    https://docs.scala-lang.org/tour/singleton-objects.html
-
-  - system of actors
-    /<name>/system/
-    /<name>/user/
-    /<name>/user/<supervisor>/
 
   - lifecycle
     preStart
@@ -130,7 +219,12 @@
 
 * akke stream
 
-  - API for stream processing
+  - API for stream processing, which solves:
+    - giving back-pressure to producer
+      by using pull-stream
+      (not overflow any buffers or mailboxes in the process)
+    - actor messages can be lost
+      and must be retransmitted for stream
 
   - *back-pressure*
     to be able to limit the buffering that actors employ,

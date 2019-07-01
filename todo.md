@@ -1,0 +1,1 @@
+- cooks to `cookbook/akka/stream`
