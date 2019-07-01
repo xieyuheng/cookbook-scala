@@ -1,4 +1,4 @@
-package com.example
+package xieyuheng.cookbook.akka
 
 import akka.actor.{ Actor, ActorSystem, ActorRef, ActorLogging, Props, Terminated }
 import scala.io.StdIn

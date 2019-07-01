@@ -1,4 +1,4 @@
-package com.example
+package xieyuheng.cookbook.akka
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http

@@ -1,4 +1,4 @@
-package com.example
+package xieyuheng.cookbook.akka
 
 import akka.stream.{ ActorMaterializer }
 import akka.stream.scaladsl._

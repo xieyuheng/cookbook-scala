@@ -1,4 +1,4 @@
-package com.example
+package xieyuheng.cookbook.akka
 
 import akka.actor.{ Actor, ActorRef, ActorLogging, Props }
 import scala.concurrent.duration._

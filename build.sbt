@@ -1,12 +1,12 @@
-name := "instar3"
-version := "1.0"
-scalaVersion := "2.12.6"
-lazy val akkaVersion = "2.5.23" // "2.6.0-M3"
-libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
-  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-  "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
-  "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-  "com.typesafe.akka" %% "akka-http" % "10.1.8",
-  "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.8",
-)
+organization := "xieyuheng"
+name := "cookbook-akka"
+version := "0.0.1"
+scalaVersion := "2.13.0"
+lazy val akkaVersion = "2.5.23"
+lazy val akkaHttpVersion = "10.1.8"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
