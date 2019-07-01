@@ -207,6 +207,20 @@
 
 *** scatter-gather
 
+* akka style
+
+  - actor as subclass of `Actor`
+
+  - companion object for message case classes and case objects
+    https://docs.scala-lang.org/tour/singleton-objects.html
+
+  - use "a block of cases" for `PartialFunction[Any, Unit]`
+    https://blog.bruchez.name/2011/10/scala-partial-functions-without-phd.html
+
+    "An anonymous function can be defined by
+    a sequence of cases [...]
+    which appear as an expression without a prior match."
+
 * http
 
   - Akka HTTP model contains a deeply structured,

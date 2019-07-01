@@ -18,17 +18,19 @@ class AkkaQuickstartSpec(_system: ActorSystem)
     shutdown(system)
   }
 
-  "A Greeter Actor" should {
-    "pass on a greeting message when instructed to" in {
-      val probe = TestProbe()
-      val helloGreetingMessage = "hello"
-      val helloGreeter = system.actorOf(Greeter.props(helloGreetingMessage, probe.ref))
-      val name = "Akka"
-      helloGreeter ! Greeter.WhoToGreet(name)
-      helloGreeter ! Greeter.Greet
-      probe.expectMsg(
-        500.milliseconds,
-        Printer.Greeting(helloGreetingMessage + ", " + name))
+  "A Greeter" should {
+    "say Hi {name} to logger" in {
+      val logger = TestProbe()
+      val greeter = system.actorOf(Greeter.props(logger.ref))
+      greeter ! Greeter.SayHi("Xie Yuheng")
+      logger.expectMsg(500.milliseconds, Logger.Log("Hi! Xie Yuheng"))
+    }
+
+    "also say Bye to logger" in {
+      val logger = TestProbe()
+      val greeter = system.actorOf(Greeter.props(logger.ref))
+      greeter ! Greeter.SayBye
+      logger.expectMsg(500.milliseconds, Logger.Log("Bye ^-^/"))
     }
   }
 }
