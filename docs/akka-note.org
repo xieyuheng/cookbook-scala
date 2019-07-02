@@ -248,6 +248,18 @@
   - x -
     the arch example of stream is HttpEntity stream
 
+  - x -
+    just like actor need ActorSystem to run,
+    streams need Materializer to run.
+
+  - actor usually has an unbounded, or a bounded, but dropping mailbox.
+    Akka Stream processing entities have bounded "mailboxes" that do not drop.
+
+  - Materialization is the process of
+    allocating all resources needed
+    to run the computation described by a Graph
+    (in Akka Streams this will often involve starting up Actors).
+
 * backpressure
 
   - https://medium.com/@jayphelps/backpressure-explained-the-flow-of-data-through-software-2350b3e77ce7
