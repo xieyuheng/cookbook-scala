@@ -1,1 +1,3 @@
-- cooks to `cookbook/akka/stream`
+- [stream] graph
+- generate API docs
+- cat

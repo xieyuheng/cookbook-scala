@@ -1,5 +1,5 @@
 organization := "xieyuheng"
-name := "cookbook-akka"
+name := "cookbook"
 version := "0.0.1"
 scalaVersion := "2.13.0"
 lazy val akkaVersion = "2.5.23"

@@ -1,4 +1,4 @@
-# Cookbook Akka
+# Cookbook Scala
 
 ## Contains
 
@@ -13,6 +13,7 @@
 
 - [Akka Quickstart with Scala](https://developer.lightbend.com/guides/akka-quickstart-scala/index.html)
 - [Introduction to Akka](https://doc.akka.io/docs/akka/current/guide/introduction.html)
+- [Essential Slick](https://books.underscore.io/essential-slick/essential-slick-3.html)
 
 ## License
 
