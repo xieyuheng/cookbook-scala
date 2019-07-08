@@ -1,3 +1,5 @@
+- renew sql
+- finish EssentialSlick
+- the use of "ch.qos.logback" % "logback-classic"
 - [stream] graph
 - generate API docs
-- cat

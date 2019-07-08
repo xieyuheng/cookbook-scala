@@ -1,1 +1,12 @@
 #+title: slick note
+
+- slick provides collection-like API for relational databases
+
+* basics
+
+  - query -- collection-like API
+    with map, flatMap, filter, and withFilter
+
+  - query.result: DBIOAction[T]
+
+  - db.run(action): Future[T]
