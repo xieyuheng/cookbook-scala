@@ -1,6 +1,5 @@
 package xieyuheng.cookbook.slick
 
-// import slick.jdbc.H2Profile.api._
 import slick.jdbc.MySQLProfile.api._
 
 import scala.concurrent.{ Future, Await }
@@ -24,10 +23,6 @@ object EssentialSlick extends App {
     def * = (sender, content, id).mapTo[Message]
   }
 
-  lazy val messages = TableQuery[MessageTable]
-
-  val db = Database.forConfig("chapter01")
-
   def freshTestData = Seq(
     Message("Dave", "Hello, HAL. Do you read me, HAL?"),
     Message("HAL",  "Affirmative, Dave. I read you."),
@@ -39,28 +34,41 @@ object EssentialSlick extends App {
     Await.result(res, 100 seconds)
   }
 
-  // exec(messages.schema.create)
-  exec(messages ++= freshTestData)
-  exec(
-    messages
-      .result
-  ) foreach { println }
-  exec(
-    messages
-      .filter(_.sender === "HAL")
-      .result
-  ) foreach { println }
-  exec(
-    messages
-      .filter(_.sender === "Dave")
-      .result
-  ) foreach { println }
+  lazy val messages = TableQuery[MessageTable]
 
-  exec(messages += Message("Dave","What if I say 'Pretty please'?"))
+  val db = Database.forConfig("CookbookSlick")
+
+  // exec(messages.schema.create)
+
+  print("STATEMENTS: ")
+  println(messages.result.statements.mkString)
+
+  exec(messages += Message("Xie",  "haha!"))
+
+  exec(messages ++= freshTestData)
+
+//   exec(
+//     messages
+//       .result
+//   ) foreach { println }
+//   exec(
+//     messages
+//       .filter(_.sender === "HAL")
+//       .result
+//   ) foreach { println }
+//   exec(
+//     messages
+//       .filter(_.sender === "Dave")
+//       .result
+//   ) foreach { println }
+
+//   exec(messages += Message("Dave","What if I say 'Pretty please'?"))
 
   val query = for {
-    message <- messages if message.sender === "Dave"
+    message <- messages if message.sender === "Xie"
   } yield message
 
-  exec(query.result).foreach { println }
+  exec(query.sortBy(m => (m.sender, m.content)).take(3).result).foreach { println }
+
+  exec(Query("1").result)
 }

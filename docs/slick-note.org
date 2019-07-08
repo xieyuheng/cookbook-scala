@@ -2,7 +2,7 @@
 
 - slick provides collection-like API for relational databases
 
-* basics
+* 1 Basics
 
   - query -- collection-like API
     with map, flatMap, filter, and withFilter
@@ -10,3 +10,24 @@
   - query.result: DBIOAction[T]
 
   - db.run(action): Future[T]
+
+* 2 Selecting Data
+
+  - query.map(row => ...)
+    query.filter(row => ...)
+    query.filterOpt(option)((row, value) => ...)
+    query.filterIf(flag)(row => ...)
+
+  - query.sortBy(row => ...)
+    query.take(n)
+    query.drop(n)
+
+* 3 Creating and Modifying Data
+
+* 4 Combining Actions
+
+* 5 Data Modelling
+
+* 6 Joins and Aggregates
+
+* 7 Plain SQL

@@ -1,6 +1,5 @@
 package xieyuheng.cookbook.slick
 
-// import slick.jdbc.H2Profile.api._
 import slick.jdbc.MySQLProfile.api._
 
 import scala.concurrent.{ Future, Await }
@@ -24,5 +23,12 @@ class CountryTable(
 object Seven extends App {
   lazy val countries = TableQuery[CountryTable]
 
-  val db = Database.forConfig("booktest")
+  val db = Database.forConfig("CookbookSlick")
+
+  def exec[T](program: DBIO[T]): T = {
+    val res: Future[T] = db.run(program)
+    Await.result(res, 100 seconds)
+  }
+
+  exec(countries.schema.create)
 }
