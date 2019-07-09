@@ -1,8 +1,0 @@
-- renew sql
-- finish EssentialSlick
-- finish Seven with slick
-- slick docs
-  - the use of "ch.qos.logback" % "logback-classic"
-- more sql
-- [stream] graph
-- generate API docs

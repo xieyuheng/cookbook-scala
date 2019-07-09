@@ -19,7 +19,6 @@ class CountryTable(
   def * = (countryCode, countryName).mapTo[Country]
 }
 
-
 object Seven extends App {
   lazy val countries = TableQuery[CountryTable]
 
