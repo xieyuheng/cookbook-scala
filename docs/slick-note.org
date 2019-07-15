@@ -7,22 +7,30 @@
   - query -- collection-like API
     with map, flatMap, filter, and withFilter
 
-  - query.result: DBIOAction[T]
+  - query.result : DBIOAction[T]
 
-  - db.run(action): Future[T]
+  - db.run(action) : Future[T]
 
 * 2 Selecting Data
 
-  - query.map(row => ...)
-    query.filter(row => ...)
-    query.filterOpt(option)((row, value) => ...)
-    query.filterIf(flag)(row => ...)
+  - query.map(row => ...) : Query
+    query.filter(row => ...) : Query
+    query.filterOpt(option)((row, value) => ...) : Query
+    query.filterIf(flag)(row => ...) : Query
 
-  - query.sortBy(row => ...)
-    query.take(n)
-    query.drop(n)
+  - query.sortBy(row => ...) : Query
+    query.take(n) : Query
+    query.drop(n) : Query
+
+  - query.exists : Query
 
 * 3 Creating and Modifying Data
+
+  - table += row : Action
+    table ++= rows : Action
+    table.returning(query) : TableQuery
+    table.delete : Action
+    table.update(tuple) : Action
 
 * 4 Combining Actions
 
