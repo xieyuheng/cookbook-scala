@@ -57,7 +57,7 @@ object JoinPracticesData {
     Department(35, "Marketing"))
 
   def employees = Seq(
-    Employee(123, ",Rafferty", "Australia", Some(31)),
+    Employee(123, "Rafferty", "Australia", Some(31)),
     Employee(124, "Jones", "Australia", Some(33)),
     Employee(145, "Heisenberg", "Australia", Some(33)),
     Employee(201, "Robinson", "United States", Some(34)),
@@ -86,10 +86,58 @@ object JoinPracticesApp extends App {
     "deleted" -> deleted,
     "inserted" -> inserted))
 
+  def crossJoin =
+    TableQuery[EmployeeTable]
+      .join(TableQuery[DepartmentTable])
+      .result
+
+  def innerJoin =
+    TableQuery[EmployeeTable]
+      .join(TableQuery[DepartmentTable])
+      .on { _.DepartmentId === _.DepartmentId }
+      .map { case (e, d) => (e.LastName, e.DepartmentId, d.DepartmentName) }
+      .result
+
+  def leftJoin =
+    TableQuery[EmployeeTable]
+      .joinLeft(TableQuery[DepartmentTable])
+      .on { _.DepartmentId === _.DepartmentId }
+      .result
+
+  def rightJoin =
+    TableQuery[EmployeeTable]
+      .joinRight(TableQuery[DepartmentTable])
+      .on { _.DepartmentId === _.DepartmentId }
+      .result
+
+  def selfJoin =
+    TableQuery[EmployeeTable]
+      .join(TableQuery[EmployeeTable])
+      .on { _.Country === _.Country }
+      .filter { case (a, b) => a.EmployeeId < b.EmployeeId }
+      .sortBy { case (a, b) => (a.EmployeeId.desc, b.EmployeeId.desc) }
+      .result
+
   db.run(
     for {
       i1 <- initDepartmentTable
       i2 <- initEmployeeTable
-    } yield (i1, i2)
-  ).onComplete { println }
+      cross <- crossJoin
+      inner <- innerJoin
+      left <- leftJoin
+      right <- rightJoin
+      self <- selfJoin
+    } yield (i1, i2, cross, inner, left, right, self)
+  ).onComplete {
+    case Success((i1, i2, cross, inner, left, right, self)) => {
+      println((i1, i2))
+      cross.foreach(println)
+      inner.foreach(println)
+      left.foreach { case (e, d) => println(e.LastName, e.DepartmentId, d) }
+      right.foreach { case (e, d) => println(e, d.DepartmentName) }
+      self.foreach { case (a, b) =>
+        println(a.EmployeeId, a.LastName, b.EmployeeId, b.LastName, a.Country) }
+    }
+    case Failure(error) => println(error)
+  }
 }
