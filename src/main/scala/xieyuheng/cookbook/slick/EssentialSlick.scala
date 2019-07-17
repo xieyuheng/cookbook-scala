@@ -32,7 +32,7 @@ object Data {
 object EssentialSlick extends App {
   lazy val messages = TableQuery[MessageTable]
 
-  implicit val db = Database.forConfig("CookbookSlick")
+  val db = Database.forConfig("CookbookSlick")
 
   db.run(messages.schema.create.asTry).onComplete { println }
   db.run(messages += Message("Xie", "haha!")).onComplete { println }
