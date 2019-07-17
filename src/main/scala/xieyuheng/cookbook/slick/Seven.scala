@@ -1,10 +1,10 @@
 package xieyuheng.cookbook.slick
 
 import slick.jdbc.MySQLProfile.api._
-
-import scala.concurrent.{ Future, Await }
+import scala.concurrent.{ Future, Await, blocking }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Failure, Success }
 
 case class Country(
   countryCode: String,
@@ -24,10 +24,5 @@ object Seven extends App {
 
   val db = Database.forConfig("CookbookSlick")
 
-  def exec[T](program: DBIO[T]): T = {
-    val res: Future[T] = db.run(program)
-    Await.result(res, 100 seconds)
-  }
-
-  exec(countries.schema.create)
+  db.run(countries.schema.create).onComplete { println }
 }

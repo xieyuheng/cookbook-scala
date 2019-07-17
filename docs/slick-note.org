@@ -34,6 +34,15 @@
 
 * 4 Combining Actions
 
+  - the API is designed for exception `Try`
+    instead of `Either`
+
+* [note] three Monads
+
+  - Query
+  - BDIO and BDIOAction
+  - Future
+
 * 5 Data Modelling
 
 * 6 Joins and Aggregates
