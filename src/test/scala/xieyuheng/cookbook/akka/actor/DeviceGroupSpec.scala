@@ -1,8 +1,8 @@
 package xieyuheng.cookbook.akka
 
-import org.scalatest.{ BeforeAndAfterAll, WordSpecLike, Matchers }
+import org.scalatest.{BeforeAndAfterAll, WordSpecLike, Matchers}
 import akka.actor.ActorSystem
-import akka.testkit.{ TestKit, TestProbe }
+import akka.testkit.{TestKit, TestProbe}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -14,9 +14,8 @@ class DeviceGroupSpec(_system: ActorSystem)
 
   def this() = this(ActorSystem("DeviceGroupSpec"))
 
-  override def afterAll = {
+  override def afterAll =
     shutdown(system)
-  }
 
   "be able to register a device actor" in {
     val probe = TestProbe()
@@ -43,7 +42,10 @@ class DeviceGroupSpec(_system: ActorSystem)
     val probe = TestProbe()
     val group = system.actorOf(DeviceGroup.props("group"))
 
-    group.tell(DeviceManager.RequestTrackDevice("wrongGroup", "device1"), probe.ref)
+    group.tell(
+      DeviceManager.RequestTrackDevice("wrongGroup", "device1"),
+      probe.ref
+    )
     probe.expectNoMessage(500.milliseconds)
   }
 
@@ -73,7 +75,9 @@ class DeviceGroupSpec(_system: ActorSystem)
     probe.expectMsg(DeviceManager.DeviceRegistered)
 
     group.tell(DeviceGroup.RequestDeviceIds(requestId = 0), probe.ref)
-    probe.expectMsg(DeviceGroup.ReplyDeviceIds(requestId = 0, Set("device1", "device2")))
+    probe.expectMsg(
+      DeviceGroup.ReplyDeviceIds(requestId = 0, Set("device1", "device2"))
+    )
   }
 
   "be able to list active devices after one shuts down" in {
@@ -89,7 +93,9 @@ class DeviceGroupSpec(_system: ActorSystem)
     probe.expectMsg(DeviceManager.DeviceRegistered)
 
     group.tell(DeviceGroup.RequestDeviceIds(requestId = 0), probe.ref)
-    probe.expectMsg(DeviceGroup.ReplyDeviceIds(requestId = 0, Set("device1", "device2")))
+    probe.expectMsg(
+      DeviceGroup.ReplyDeviceIds(requestId = 0, Set("device1", "device2"))
+    )
 
     probe.watch(toShutDown)
     toShutDown ! akka.actor.PoisonPill
@@ -133,6 +139,9 @@ class DeviceGroupSpec(_system: ActorSystem)
         temperatures = Map(
           "device1" -> DeviceGroup.Temperature(1.0),
           "device2" -> DeviceGroup.Temperature(2.0),
-          "device3" -> DeviceGroup.TemperatureNotAvailable)))
+          "device3" -> DeviceGroup.TemperatureNotAvailable
+        )
+      )
+    )
   }
 }

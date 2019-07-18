@@ -1,8 +1,8 @@
 package xieyuheng.cookbook.akka
 
-import org.scalatest.{ BeforeAndAfterAll, WordSpecLike, Matchers }
+import org.scalatest.{BeforeAndAfterAll, WordSpecLike, Matchers}
 import akka.actor.ActorSystem
-import akka.testkit.{ TestKit, TestProbe }
+import akka.testkit.{TestKit, TestProbe}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -14,9 +14,8 @@ class DeviceSpec(_system: ActorSystem)
 
   def this() = this(ActorSystem("DeviceSpec"))
 
-  override def afterAll = {
+  override def afterAll =
     shutdown(system)
-  }
 
   "reply with empty reading if no temperature is known" in {
     val probe = TestProbe()
@@ -76,10 +75,16 @@ class DeviceSpec(_system: ActorSystem)
     val probe = TestProbe()
     val device = system.actorOf(Device.props("group", "device"))
 
-    device.tell(DeviceManager.RequestTrackDevice("wrongGroup", "device"), probe.ref)
+    device.tell(
+      DeviceManager.RequestTrackDevice("wrongGroup", "device"),
+      probe.ref
+    )
     probe.expectNoMessage(500.milliseconds)
 
-    device.tell(DeviceManager.RequestTrackDevice("group", "Wrongdevice"), probe.ref)
+    device.tell(
+      DeviceManager.RequestTrackDevice("group", "Wrongdevice"),
+      probe.ref
+    )
     probe.expectNoMessage(500.milliseconds)
   }
 }

@@ -14,7 +14,8 @@ object CollectingHeader extends App {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-  val responseFuture: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = "https://akka.io"))
+  val responseFuture: Future[HttpResponse] =
+    Http().singleRequest(HttpRequest(uri = "https://akka.io"))
 
   responseFuture.map {
     case response @ HttpResponse(StatusCodes.OK, _, _, _) =>

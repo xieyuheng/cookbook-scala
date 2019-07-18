@@ -1,8 +1,8 @@
 package xieyuheng.cookbook.akka
 
-import org.scalatest.{ BeforeAndAfterAll, WordSpecLike, Matchers }
-import akka.actor.{ ActorSystem, PoisonPill }
-import akka.testkit.{ TestKit, TestProbe }
+import org.scalatest.{BeforeAndAfterAll, WordSpecLike, Matchers}
+import akka.actor.{ActorSystem, PoisonPill}
+import akka.testkit.{TestKit, TestProbe}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -14,9 +14,8 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
 
   def this() = this(ActorSystem("DeviceGroupQueryNaturalSpec"))
 
-  override def afterAll = {
+  override def afterAll =
     shutdown(system)
-  }
 
   "return temperature value for working devices" in {
     val requester = TestProbe()
@@ -26,12 +25,12 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
 
     val query = system.actorOf(
       DeviceGroupQuery.props(
-        deviceIdMap = Map(
-          device1.ref -> "device1",
-          device2.ref -> "device2"),
+        deviceIdMap = Map(device1.ref -> "device1", device2.ref -> "device2"),
         requestId = 1,
         requester = requester.ref,
-        timeout = 3.seconds))
+        timeout = 3.seconds
+      )
+    )
 
     device1.expectMsg(Device.ReadTemperature(requestId = 0))
     device2.expectMsg(Device.ReadTemperature(requestId = 0))
@@ -44,7 +43,10 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
         requestId = 1,
         temperatures = Map(
           "device1" -> DeviceGroup.Temperature(1.0),
-          "device2" -> DeviceGroup.Temperature(2.0))))
+          "device2" -> DeviceGroup.Temperature(2.0)
+        )
+      )
+    )
   }
 
   "return TemperatureNotAvailable for devices with no readings" in {
@@ -55,12 +57,12 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
 
     val query = system.actorOf(
       DeviceGroupQuery.props(
-        deviceIdMap = Map(
-          device1.ref -> "device1",
-          device2.ref -> "device2"),
+        deviceIdMap = Map(device1.ref -> "device1", device2.ref -> "device2"),
         requestId = 1,
         requester = requester.ref,
-        timeout = 3.seconds))
+        timeout = 3.seconds
+      )
+    )
 
     device1.expectMsg(Device.ReadTemperature(requestId = 0))
     device2.expectMsg(Device.ReadTemperature(requestId = 0))
@@ -73,7 +75,10 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
         requestId = 1,
         temperatures = Map(
           "device1" -> DeviceGroup.TemperatureNotAvailable,
-          "device2" -> DeviceGroup.Temperature(2.0))))
+          "device2" -> DeviceGroup.Temperature(2.0)
+        )
+      )
+    )
   }
 
   "return DeviceNotAvailable if device stops before answering" in {
@@ -84,12 +89,12 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
 
     val query = system.actorOf(
       DeviceGroupQuery.props(
-        deviceIdMap = Map(
-          device1.ref -> "device1",
-          device2.ref -> "device2"),
+        deviceIdMap = Map(device1.ref -> "device1", device2.ref -> "device2"),
         requestId = 1,
         requester = requester.ref,
-        timeout = 3.seconds))
+        timeout = 3.seconds
+      )
+    )
 
     device1.expectMsg(Device.ReadTemperature(requestId = 0))
     device2.expectMsg(Device.ReadTemperature(requestId = 0))
@@ -102,7 +107,10 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
         requestId = 1,
         temperatures = Map(
           "device1" -> DeviceGroup.Temperature(1.0),
-          "device2" -> DeviceGroup.DeviceNotAvailable)))
+          "device2" -> DeviceGroup.DeviceNotAvailable
+        )
+      )
+    )
   }
 
   "return temperature reading even if device stops after answering" in {
@@ -113,12 +121,12 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
 
     val query = system.actorOf(
       DeviceGroupQuery.props(
-        deviceIdMap = Map(
-          device1.ref -> "device1",
-          device2.ref -> "device2"),
+        deviceIdMap = Map(device1.ref -> "device1", device2.ref -> "device2"),
         requestId = 1,
         requester = requester.ref,
-        timeout = 3.seconds))
+        timeout = 3.seconds
+      )
+    )
 
     device1.expectMsg(Device.ReadTemperature(requestId = 0))
     device2.expectMsg(Device.ReadTemperature(requestId = 0))
@@ -132,7 +140,10 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
         requestId = 1,
         temperatures = Map(
           "device1" -> DeviceGroup.Temperature(1.0),
-          "device2" -> DeviceGroup.Temperature(2.0))))
+          "device2" -> DeviceGroup.Temperature(2.0)
+        )
+      )
+    )
   }
 
   "return DeviceTimedOut if device does not answer in time" in {
@@ -143,12 +154,12 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
 
     val query = system.actorOf(
       DeviceGroupQuery.props(
-        deviceIdMap = Map(
-          device1.ref -> "device1",
-          device2.ref -> "device2"),
+        deviceIdMap = Map(device1.ref -> "device1", device2.ref -> "device2"),
         requestId = 1,
         requester = requester.ref,
-        timeout = 0.3.second))
+        timeout = 0.3.second
+      )
+    )
 
     device1.expectMsg(Device.ReadTemperature(requestId = 0))
     device2.expectMsg(Device.ReadTemperature(requestId = 0))
@@ -160,6 +171,9 @@ class DeviceGroupQueryNaturalSpec(_system: ActorSystem)
         requestId = 1,
         temperatures = Map(
           "device1" -> DeviceGroup.Temperature(1.0),
-          "device2" -> DeviceGroup.DeviceTimedOut)))
+          "device2" -> DeviceGroup.DeviceTimedOut
+        )
+      )
+    )
   }
 }

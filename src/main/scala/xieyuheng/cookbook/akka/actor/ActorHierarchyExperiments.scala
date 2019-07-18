@@ -1,6 +1,6 @@
 package xieyuheng.cookbook.akka
 
-import akka.actor.{ Actor, ActorSystem, Props }
+import akka.actor.{Actor, ActorSystem, Props}
 import scala.io.StdIn
 
 object PrintMyActorRefActor {

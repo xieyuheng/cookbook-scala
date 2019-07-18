@@ -1,6 +1,13 @@
 package xieyuheng.cookbook.akka
 
-import akka.actor.{ Actor, ActorSystem, ActorRef, ActorLogging, Props, Terminated }
+import akka.actor.{
+  Actor,
+  ActorSystem,
+  ActorRef,
+  ActorLogging,
+  Props,
+  Terminated
+}
 import scala.io.StdIn
 
 object Indeter {

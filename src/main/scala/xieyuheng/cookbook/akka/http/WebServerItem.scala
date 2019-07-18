@@ -41,7 +41,7 @@ object WebServerItem {
   def saveOrder(order: Order): Future[Done] = {
     orders = order match {
       case Order(items) => items ::: orders
-      case _            => orders
+      case _ => orders
     }
     Future { Done }
   }
@@ -60,16 +60,16 @@ object WebServerItem {
           }
         }
       } ~
-    post {
-      path("create-order") {
-        entity(as[Order]) { order =>
-          val saved: Future[Done] = saveOrder(order)
-          onComplete(saved) { done =>
-            complete("order created")
+        post {
+          path("create-order") {
+            entity(as[Order]) { order =>
+              val saved: Future[Done] = saveOrder(order)
+              onComplete(saved) { done =>
+                complete("order created")
+              }
+            }
           }
         }
-      }
-    }
 
     val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
     println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")

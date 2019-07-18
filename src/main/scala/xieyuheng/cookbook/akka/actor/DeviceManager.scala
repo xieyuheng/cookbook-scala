@@ -1,6 +1,6 @@
 package xieyuheng.cookbook.akka
 
-import akka.actor.{ Actor, ActorRef, ActorLogging, Props }
+import akka.actor.{Actor, ActorRef, ActorLogging, Props}
 
 object DeviceManager {
   def props(): Props = Props(new DeviceManager)
@@ -8,7 +8,6 @@ object DeviceManager {
   case class RequestTrackDevice(groupId: String, deviceId: String)
   case object DeviceRegistered
 }
-
 
 class DeviceManager extends Actor with ActorLogging {
   import DeviceManager._
@@ -27,7 +26,8 @@ class DeviceManager extends Actor with ActorLogging {
           group.forward(req)
         case None =>
           log.info("Creating device group actor for {}", groupId)
-          val group = context.actorOf(DeviceGroup.props(groupId), "group-" + groupId)
+          val group =
+            context.actorOf(DeviceGroup.props(groupId), "group-" + groupId)
           context.watch(group)
           group.forward(req)
           groupMap += groupId -> group

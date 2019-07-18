@@ -9,7 +9,8 @@ class StackableVariable[A](init: A) {
 
   def withValue[B](newValue: A)(op: => B): B = {
     values = newValue :: values
-    try op finally values = values.tail
+    try op
+    finally values = values.tail
   }
 }
 
@@ -39,8 +40,7 @@ class Signal[A](exp: => A) {
 
   def apply() = {
     observers += caller.value
-    assert(!caller.value.observers.contains(this),
-      "cyclic signal definition")
+    assert(!caller.value.observers.contains(this), "cyclic signal definition")
     currentValue
   }
 }
@@ -81,9 +81,8 @@ object SignalExample extends App {
       } else throw new Error("insufficient funds")
   }
 
-  def consolidated(accounts: List[BankAccount]): Signal[Int] = {
+  def consolidated(accounts: List[BankAccount]): Signal[Int] =
     Signal(accounts.map(_.balance()).foldLeft(0)(_ + _))
-  }
 
   val a = new BankAccount()
   val b = new BankAccount()

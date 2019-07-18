@@ -1,6 +1,6 @@
 package xieyuheng.cookbook.akka
 
-import akka.actor.{ Actor, ActorRef, ActorSystem, PoisonPill, Props }
+import akka.actor.{Actor, ActorRef, ActorSystem, PoisonPill, Props}
 import language.postfixOps
 import scala.concurrent.duration._
 

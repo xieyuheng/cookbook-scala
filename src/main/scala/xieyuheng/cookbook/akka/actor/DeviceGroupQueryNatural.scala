@@ -1,6 +1,6 @@
 package xieyuheng.cookbook.akka
 
-import akka.actor.{ Actor, ActorRef, ActorLogging, Props, Terminated }
+import akka.actor.{Actor, ActorRef, ActorLogging, Props, Terminated}
 import scala.concurrent.duration._
 
 /*
@@ -17,45 +17,43 @@ object DeviceGroupQueryNatural {
   case object CollectionTimeout
 
   def props(
-    deviceIdMap: Map[ActorRef, String],
-    requestId: Long,
-    requester: ActorRef,
-    timeout: FiniteDuration,
-  ) = Props(
-    new DeviceGroupQueryNatural(
-      deviceIdMap,
-      requestId,
-      requester,
-      timeout))
+      deviceIdMap: Map[ActorRef, String],
+      requestId: Long,
+      requester: ActorRef,
+      timeout: FiniteDuration
+  ) =
+    Props(
+      new DeviceGroupQueryNatural(deviceIdMap, requestId, requester, timeout)
+    )
 }
 
 class DeviceGroupQueryNatural(
-  deviceIdMap: Map[ActorRef, String],
-  requestId: Long,
-  requester: ActorRef,
-  timeout: FiniteDuration,
-) extends Actor with ActorLogging {
+    deviceIdMap: Map[ActorRef, String],
+    requestId: Long,
+    requester: ActorRef,
+    timeout: FiniteDuration
+) extends Actor
+    with ActorLogging {
   import DeviceGroupQueryNatural._
   import context.dispatcher
 
-  val queryTimeoutTimer = context.system.scheduler.scheduleOnce(timeout, self, CollectionTimeout)
+  val queryTimeoutTimer =
+    context.system.scheduler.scheduleOnce(timeout, self, CollectionTimeout)
 
-  override def preStart() = {
+  override def preStart() =
     deviceIdMap.keysIterator.foreach { device =>
       context.watch(device)
       device ! Device.ReadTemperature(0)
     }
-  }
 
-  override def postStop() = {
+  override def postStop() =
     queryTimeoutTimer.cancel()
-  }
 
   var repliesSoFar: Map[String, DeviceGroup.TemperatureReading] = Map.empty
   var stillWaiting: Set[ActorRef] = deviceIdMap.keySet
 
   def receive = {
-    case Device.RespondTemperature (0, option) =>
+    case Device.RespondTemperature(0, option) =>
       val device = sender()
       val reading = option match {
         case Some(value) => DeviceGroup.Temperature(value)
@@ -71,13 +69,16 @@ class DeviceGroupQueryNatural(
         val deviceId = deviceIdMap(device)
         deviceId -> DeviceGroup.DeviceTimedOut
       }
-      requester ! DeviceGroup.RespondAllTemperatures(requestId, repliesSoFar ++ timedOutReplies)
+      requester ! DeviceGroup.RespondAllTemperatures(
+        requestId,
+        repliesSoFar ++ timedOutReplies
+      )
       context.stop(self)
   }
 
   def receivedResponse(
-    device: ActorRef,
-    reading: DeviceGroup.TemperatureReading,
+      device: ActorRef,
+      reading: DeviceGroup.TemperatureReading
   ): Unit = {
     context.unwatch(device)
 

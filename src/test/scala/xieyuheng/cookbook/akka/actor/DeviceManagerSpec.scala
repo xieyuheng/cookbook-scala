@@ -1,8 +1,8 @@
 package xieyuheng.cookbook.akka
 
-import org.scalatest.{ BeforeAndAfterAll, WordSpecLike, Matchers }
+import org.scalatest.{BeforeAndAfterAll, WordSpecLike, Matchers}
 import akka.actor.ActorSystem
-import akka.testkit.{ TestKit, TestProbe }
+import akka.testkit.{TestKit, TestProbe}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -14,19 +14,24 @@ class DeviceManagerSpec(_system: ActorSystem)
 
   def this() = this(ActorSystem("DeviceManagerSpec"))
 
-  override def afterAll = {
+  override def afterAll =
     shutdown(system)
-  }
 
   "be able to register a group actor" in {
     val probe = TestProbe()
     val manager = system.actorOf(DeviceManager.props())
 
-    manager.tell(DeviceManager.RequestTrackDevice("group", "device1"), probe.ref)
+    manager.tell(
+      DeviceManager.RequestTrackDevice("group", "device1"),
+      probe.ref
+    )
     probe.expectMsg(DeviceManager.DeviceRegistered)
     val device1 = probe.lastSender
 
-    manager.tell(DeviceManager.RequestTrackDevice("group", "device2"), probe.ref)
+    manager.tell(
+      DeviceManager.RequestTrackDevice("group", "device2"),
+      probe.ref
+    )
     probe.expectMsg(DeviceManager.DeviceRegistered)
     val device2 = probe.lastSender
 
@@ -43,11 +48,17 @@ class DeviceManagerSpec(_system: ActorSystem)
     val probe = TestProbe()
     val manager = system.actorOf(DeviceManager.props())
 
-    manager.tell(DeviceManager.RequestTrackDevice("group", "device1"), probe.ref)
+    manager.tell(
+      DeviceManager.RequestTrackDevice("group", "device1"),
+      probe.ref
+    )
     probe.expectMsg(DeviceManager.DeviceRegistered)
     val device1 = probe.lastSender
 
-    manager.tell(DeviceManager.RequestTrackDevice("group", "device1"), probe.ref)
+    manager.tell(
+      DeviceManager.RequestTrackDevice("group", "device1"),
+      probe.ref
+    )
     probe.expectMsg(DeviceManager.DeviceRegistered)
     val device2 = probe.lastSender
 

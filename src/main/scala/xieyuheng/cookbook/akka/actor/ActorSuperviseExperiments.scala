@@ -1,6 +1,6 @@
 package xieyuheng.cookbook.akka
 
-import akka.actor.{ Actor, ActorSystem, Props }
+import akka.actor.{Actor, ActorSystem, Props}
 import scala.io.StdIn
 
 object SupervisingActor {
@@ -33,7 +33,8 @@ class SupervisedActor extends Actor {
 object ActorSuperviseExperiments extends App {
   val system = ActorSystem("root")
 
-  val supervisingActor = system.actorOf(SupervisingActor.props, "supervising-actor")
+  val supervisingActor =
+    system.actorOf(SupervisingActor.props, "supervising-actor")
   supervisingActor ! "failChild"
 
   println(">>> press enter to exit <<<")

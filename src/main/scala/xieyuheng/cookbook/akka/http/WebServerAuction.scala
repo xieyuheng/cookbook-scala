@@ -51,13 +51,13 @@ object WebServerAuction {
             complete((StatusCodes.Accepted, "bid placed"))
           }
         } ~
-        get {
-          implicit val timeout: Timeout = 5.seconds
+          get {
+            implicit val timeout: Timeout = 5.seconds
 
-          // query the actor for the current auction state
-          val bids: Future[Bids] = (auction ? GetBids).mapTo[Bids]
-          complete(bids)
-        }
+            // query the actor for the current auction state
+            val bids: Future[Bids] = (auction ? GetBids).mapTo[Bids]
+            complete(bids)
+          }
       }
 
     val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)

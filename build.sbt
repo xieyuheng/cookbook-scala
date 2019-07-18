@@ -16,17 +16,16 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.197",
   "mysql" % "mysql-connector-java" % "6.0.6",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "io.spray" %%  "spray-json" % "1.3.5",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
+  "io.spray" %% "spray-json" % "1.3.5",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
 scalacOptions ++= Seq(
   //   "-deprecation",
   //   "-encoding", "UTF-8",
   //   "-unchecked",
-  "-feature",
+  "-feature"
   //   "-language:implicitConversions",
-  "-language:postfixOps",
   //   "-Ywarn-dead-code",
   //   "-Xfatal-warnings"
 )

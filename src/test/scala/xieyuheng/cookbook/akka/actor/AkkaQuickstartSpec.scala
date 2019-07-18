@@ -1,8 +1,8 @@
 package xieyuheng.cookbook.akka
 
-import org.scalatest.{ BeforeAndAfterAll, WordSpecLike, Matchers }
+import org.scalatest.{BeforeAndAfterAll, WordSpecLike, Matchers}
 import akka.actor.ActorSystem
-import akka.testkit.{ TestKit, TestProbe }
+import akka.testkit.{TestKit, TestProbe}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -14,9 +14,8 @@ class AkkaQuickstartSpec(_system: ActorSystem)
 
   def this() = this(ActorSystem("AkkaQuickstartSpec"))
 
-  override def afterAll = {
+  override def afterAll =
     shutdown(system)
-  }
 
   "A Greeter" should {
     "say Hi {name} to logger" in {

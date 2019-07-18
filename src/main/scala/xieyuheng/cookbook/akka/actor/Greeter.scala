@@ -1,11 +1,6 @@
 package xieyuheng.cookbook.akka
 
-import akka.actor.{
-  Actor,
-  ActorRef,
-  ActorSystem,
-  Props,
-}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import akka.event.Logging
 
 object Greeter {

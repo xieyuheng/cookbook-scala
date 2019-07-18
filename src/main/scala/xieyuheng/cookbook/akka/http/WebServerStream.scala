@@ -21,8 +21,8 @@ object WebServerStream {
 
     // streams are re-usable so we can define it here
     // and use it for every request
-    val numbers = Source.fromIterator(() =>
-      Iterator.continually(Random.nextInt()))
+    val numbers =
+      Source.fromIterator(() => Iterator.continually(Random.nextInt()))
 
     val route =
       path("random") {

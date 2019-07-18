@@ -1,13 +1,13 @@
 package xieyuheng.cookbook.akka.stream
 
-import akka.stream.{ ActorMaterializer }
-import akka.stream.scaladsl.{ Source, Sink, Flow, Keep, RunnableGraph }
-import akka.{ Done, NotUsed }
+import akka.stream.{ActorMaterializer}
+import akka.stream.scaladsl.{Source, Sink, Flow, Keep, RunnableGraph}
+import akka.{Done, NotUsed}
 import akka.actor.ActorSystem
 import akka.util.ByteString
 import scala.concurrent._
 import scala.concurrent.duration._
-import scala.util.{ Failure, Success }
+import scala.util.{Failure, Success}
 import java.nio.file.Paths
 
 object StreamQuickstart extends App {
@@ -15,8 +15,8 @@ object StreamQuickstart extends App {
   val flow: Flow[Int, Int, NotUsed] = Flow[Int].map(2 * _)
   val sink: Sink[Int, Future[Int]] = Sink.fold(0)(_ + _)
   val runnable: RunnableGraph[Future[Int]] =
-    source
-      .async.via(flow)
+    source.async
+      .via(flow)
       .toMat(sink)(Keep.right)
 
   implicit val system = ActorSystem("StreamQuickstart")
