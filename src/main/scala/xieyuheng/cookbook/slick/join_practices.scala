@@ -111,6 +111,11 @@ object JoinPracticesApp extends App {
       .filter { case (a, b) => a.EmployeeId < b.EmployeeId }
       .sortBy { case (a, b) => (a.EmployeeId.desc, b.EmployeeId.desc) }
 
+  def monadicJoin = for {
+    e <- TableQuery[EmployeeTable] if e.Country === "Australia"
+    d <- e.DepartmentFk
+  } yield (e, d)
+
   val db = Database.forConfig("CookbookSlick")
 
   db.run(
@@ -122,9 +127,10 @@ object JoinPracticesApp extends App {
       left <- leftJoin.result
       right <- rightJoin.result
       self <- selfJoin.result
-    } yield (i1, i2, cross, inner, left, right, self)
+      monadic <- monadicJoin.result
+    } yield (i1, i2, cross, inner, left, right, self, monadic)
   ).onComplete {
-    case Success((i1, i2, cross, inner, left, right, self)) => {
+    case Success((i1, i2, cross, inner, left, right, self, monadic)) => {
       println((i1, i2))
       cross.foreach(println)
       inner.foreach(println)
@@ -132,7 +138,38 @@ object JoinPracticesApp extends App {
       right.foreach { case (e, d) => println(e, d.DepartmentName) }
       self.foreach { case (a, b) =>
         println(a.EmployeeId, a.LastName, b.EmployeeId, b.LastName, a.Country) }
+      monadic.foreach { case (e, d) => println(e, d.DepartmentName) }
     }
     case Failure(error) => println(error)
   }
+}
+
+object QueriesWithFor extends App {
+  case class Department(
+    DepartmentId: Long,
+    DepartmentName: String,
+    Employees: List[Employee])
+
+  case class Employee(
+    EmployeeId: Long,
+    LastName: String,
+    Country: String)
+
+  def departments = Set(
+    Department(31, "Sales", List(
+      Employee(123, "Rafferty", "Australia"))),
+    Department(33, "Engineering", List(
+      Employee(124, "Jones", "Australia"),
+      Employee(145, "Heisenberg", "Australia"))),
+    Department(34, "Clerical", List(
+      Employee(201, "Robinson", "United States"),
+      Employee(305, "Smith", "Germany"))),
+    Department(35, "Marketing", List()))
+
+  val result = for {
+    d <- departments
+    e <- d.Employees if e.Country == "Australia"
+  } yield (e, d)
+
+  result.foreach { case (e, d) => println(e, d.DepartmentName) }
 }
