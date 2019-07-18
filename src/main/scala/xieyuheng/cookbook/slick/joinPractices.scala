@@ -1,4 +1,4 @@
-package xieyuheng.cookbook.slick.join_practices
+package xieyuheng.cookbook.slick
 
 import slick.jdbc.MySQLProfile.api._
 import slick.model.{ ForeignKeyAction }
@@ -49,7 +49,7 @@ class EmployeeTable(tag: Tag)
       onDelete=ForeignKeyAction.Cascade)
 }
 
-object Data {
+object JoinPracticesData {
   def departments = Seq(
     Department(31, "Sales"),
     Department(33, "Engineering"),
@@ -69,7 +69,7 @@ object JoinPracticesApp extends App {
   def initDepartmentTable = for {
     tryCreate <- TableQuery[DepartmentTable].schema.create.asTry
     deleted <- TableQuery[DepartmentTable].delete
-    inserted <- TableQuery[DepartmentTable] ++= Data.departments
+    inserted <- TableQuery[DepartmentTable] ++= JoinPracticesData.departments
   } yield ("DepartmentTable", Map(
     "tryCreate" -> tryCreate,
     "deleted" -> deleted,
@@ -78,7 +78,7 @@ object JoinPracticesApp extends App {
   def initEmployeeTable = for {
     tryCreate <- TableQuery[EmployeeTable].schema.create.asTry
     deleted <- TableQuery[EmployeeTable].delete
-    inserted <- TableQuery[EmployeeTable] ++= Data.employees
+    inserted <- TableQuery[EmployeeTable] ++= JoinPracticesData.employees
   } yield ("EmployeeTable", Map(
     "tryCreate" -> tryCreate,
     "deleted" -> deleted,
@@ -142,34 +142,4 @@ object JoinPracticesApp extends App {
     }
     case Failure(error) => println(error)
   }
-}
-
-object QueriesWithFor extends App {
-  case class Department(
-    DepartmentId: Long,
-    DepartmentName: String,
-    Employees: List[Employee])
-
-  case class Employee(
-    EmployeeId: Long,
-    LastName: String,
-    Country: String)
-
-  def departments = Set(
-    Department(31, "Sales", List(
-      Employee(123, "Rafferty", "Australia"))),
-    Department(33, "Engineering", List(
-      Employee(124, "Jones", "Australia"),
-      Employee(145, "Heisenberg", "Australia"))),
-    Department(34, "Clerical", List(
-      Employee(201, "Robinson", "United States"),
-      Employee(305, "Smith", "Germany"))),
-    Department(35, "Marketing", List()))
-
-  val result = for {
-    d <- departments
-    e <- d.Employees if e.Country == "Australia"
-  } yield (e, d)
-
-  result.foreach { case (e, d) => println(e, d.DepartmentName) }
 }
