@@ -20,8 +20,7 @@ case class Employee(
     EmployeeId: Long,
     LastName: String,
     Country: String,
-    DepartmentId: Option[Long]
-)
+    DepartmentId: Option[Long])
 
 class EmployeeTable(tag: Tag) extends Table[Employee](tag, "Employee") {
   def EmployeeId = column[Long]("EmployeeId", O.PrimaryKey)
@@ -40,8 +39,7 @@ class EmployeeTable(tag: Tag) extends Table[Employee](tag, "Employee") {
   def DepartmentFk =
     foreignKey("DepartmentFk", DepartmentId, TableQuery[DepartmentTable])(
       _.DepartmentId,
-      onDelete = ForeignKeyAction.Cascade
-    )
+      onDelete = ForeignKeyAction.Cascade)
 }
 
 object joinPracticesData {
@@ -50,8 +48,7 @@ object joinPracticesData {
       Department(31, "Sales"),
       Department(33, "Engineering"),
       Department(34, "Clerical"),
-      Department(35, "Marketing")
-    )
+      Department(35, "Marketing"))
 
   def employees =
     Seq(
@@ -75,9 +72,7 @@ object JoinPracticesApp extends App {
       Map(
         "tryCreate" -> tryCreate,
         "deleted" -> deleted,
-        "inserted" -> inserted
-      )
-    )
+        "inserted" -> inserted))
 
   def initEmployeeTable =
     for {
