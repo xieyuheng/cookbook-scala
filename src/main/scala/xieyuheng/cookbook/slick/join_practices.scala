@@ -66,8 +66,6 @@ object Data {
 }
 
 object JoinPracticesApp extends App {
-  val db = Database.forConfig("CookbookSlick")
-
   def initDepartmentTable = for {
     tryCreate <- TableQuery[DepartmentTable].schema.create.asTry
     deleted <- TableQuery[DepartmentTable].delete
@@ -89,26 +87,22 @@ object JoinPracticesApp extends App {
   def crossJoin =
     TableQuery[EmployeeTable]
       .join(TableQuery[DepartmentTable])
-      .result
 
   def innerJoin =
     TableQuery[EmployeeTable]
       .join(TableQuery[DepartmentTable])
       .on { _.DepartmentId === _.DepartmentId }
       .map { case (e, d) => (e.LastName, e.DepartmentId, d.DepartmentName) }
-      .result
 
   def leftJoin =
     TableQuery[EmployeeTable]
       .joinLeft(TableQuery[DepartmentTable])
       .on { _.DepartmentId === _.DepartmentId }
-      .result
 
   def rightJoin =
     TableQuery[EmployeeTable]
       .joinRight(TableQuery[DepartmentTable])
       .on { _.DepartmentId === _.DepartmentId }
-      .result
 
   def selfJoin =
     TableQuery[EmployeeTable]
@@ -116,17 +110,18 @@ object JoinPracticesApp extends App {
       .on { _.Country === _.Country }
       .filter { case (a, b) => a.EmployeeId < b.EmployeeId }
       .sortBy { case (a, b) => (a.EmployeeId.desc, b.EmployeeId.desc) }
-      .result
+
+  val db = Database.forConfig("CookbookSlick")
 
   db.run(
     for {
       i1 <- initDepartmentTable
       i2 <- initEmployeeTable
-      cross <- crossJoin
-      inner <- innerJoin
-      left <- leftJoin
-      right <- rightJoin
-      self <- selfJoin
+      cross <- crossJoin.result
+      inner <- innerJoin.result
+      left <- leftJoin.result
+      right <- rightJoin.result
+      self <- selfJoin.result
     } yield (i1, i2, cross, inner, left, right, self)
   ).onComplete {
     case Success((i1, i2, cross, inner, left, right, self)) => {
