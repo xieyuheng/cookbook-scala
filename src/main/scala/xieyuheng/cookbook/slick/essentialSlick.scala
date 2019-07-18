@@ -21,7 +21,7 @@ class MessageTable(
   def * = (sender, content, id).mapTo[Message]
 }
 
-object Data {
+object essentialSlickData {
   def movieScript = Seq(
     Message("Dave", "Hello, HAL. Do you read me, HAL?"),
     Message("HAL",  "Affirmative, Dave. I read you."),
@@ -29,7 +29,7 @@ object Data {
     Message("HAL",  "I'm sorry, Dave. I'm afraid I can't do that."))
 }
 
-object EssentialSlick extends App {
+object EssentialSlickApp extends App {
   lazy val messages = TableQuery[MessageTable]
 
   val db = Database.forConfig("CookbookSlick")
@@ -37,7 +37,7 @@ object EssentialSlick extends App {
   db.run(messages.schema.create.asTry).onComplete { println }
   db.run(messages += Message("Xie", "haha!")).onComplete { println }
 
-  db.run(messages ++= Data.movieScript).onComplete { println }
+  db.run(messages ++= essentialSlickData.movieScript).onComplete { println }
 
   db.run(
     messages

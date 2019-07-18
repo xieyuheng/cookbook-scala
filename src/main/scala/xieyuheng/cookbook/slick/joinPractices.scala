@@ -49,7 +49,7 @@ class EmployeeTable(tag: Tag)
       onDelete=ForeignKeyAction.Cascade)
 }
 
-object JoinPracticesData {
+object joinPracticesData {
   def departments = Seq(
     Department(31, "Sales"),
     Department(33, "Engineering"),
@@ -69,7 +69,7 @@ object JoinPracticesApp extends App {
   def initDepartmentTable = for {
     tryCreate <- TableQuery[DepartmentTable].schema.create.asTry
     deleted <- TableQuery[DepartmentTable].delete
-    inserted <- TableQuery[DepartmentTable] ++= JoinPracticesData.departments
+    inserted <- TableQuery[DepartmentTable] ++= joinPracticesData.departments
   } yield ("DepartmentTable", Map(
     "tryCreate" -> tryCreate,
     "deleted" -> deleted,
@@ -78,7 +78,7 @@ object JoinPracticesApp extends App {
   def initEmployeeTable = for {
     tryCreate <- TableQuery[EmployeeTable].schema.create.asTry
     deleted <- TableQuery[EmployeeTable].delete
-    inserted <- TableQuery[EmployeeTable] ++= JoinPracticesData.employees
+    inserted <- TableQuery[EmployeeTable] ++= joinPracticesData.employees
   } yield ("EmployeeTable", Map(
     "tryCreate" -> tryCreate,
     "deleted" -> deleted,
