@@ -1,4 +1,4 @@
-package xieyuheng.cookbook.slick
+package xieyuheng.cookbook.slick.join_practices
 
 import slick.jdbc.MySQLProfile.api._
 import slick.model.{ ForeignKeyAction }
@@ -49,7 +49,7 @@ class EmployeeTable(tag: Tag)
       onDelete=ForeignKeyAction.Cascade)
 }
 
-object JoinPracticesData {
+object Data {
   def departments = Seq(
     Department(31, "Sales"),
     Department(33, "Engineering"),
@@ -71,7 +71,7 @@ object JoinPracticesApp extends App {
   def initDepartmentTable = for {
     tryCreate <- TableQuery[DepartmentTable].schema.create.asTry
     deleted <- TableQuery[DepartmentTable].delete
-    inserted <- TableQuery[DepartmentTable] ++= JoinPracticesData.departments
+    inserted <- TableQuery[DepartmentTable] ++= Data.departments
   } yield ("DepartmentTable", Map(
     "tryCreate" -> tryCreate,
     "deleted" -> deleted,
@@ -80,7 +80,7 @@ object JoinPracticesApp extends App {
   def initEmployeeTable = for {
     tryCreate <- TableQuery[EmployeeTable].schema.create.asTry
     deleted <- TableQuery[EmployeeTable].delete
-    inserted <- TableQuery[EmployeeTable] ++= JoinPracticesData.employees
+    inserted <- TableQuery[EmployeeTable] ++= Data.employees
   } yield ("EmployeeTable", Map(
     "tryCreate" -> tryCreate,
     "deleted" -> deleted,
