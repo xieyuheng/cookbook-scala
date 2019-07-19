@@ -14,8 +14,8 @@ object Device {
 }
 
 class Device(
-    groupId: String,
-    deviceId: String
+  groupId: String,
+  deviceId: String
 ) extends Actor
     with ActorLogging {
   import Device._

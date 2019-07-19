@@ -17,10 +17,10 @@ object DeviceGroupQueryNatural {
   case object CollectionTimeout
 
   def props(
-      deviceIdMap: Map[ActorRef, String],
-      requestId: Long,
-      requester: ActorRef,
-      timeout: FiniteDuration
+    deviceIdMap: Map[ActorRef, String],
+    requestId: Long,
+    requester: ActorRef,
+    timeout: FiniteDuration
   ) =
     Props(
       new DeviceGroupQueryNatural(deviceIdMap, requestId, requester, timeout)
@@ -28,10 +28,10 @@ object DeviceGroupQueryNatural {
 }
 
 class DeviceGroupQueryNatural(
-    deviceIdMap: Map[ActorRef, String],
-    requestId: Long,
-    requester: ActorRef,
-    timeout: FiniteDuration
+  deviceIdMap: Map[ActorRef, String],
+  requestId: Long,
+  requester: ActorRef,
+  timeout: FiniteDuration
 ) extends Actor
     with ActorLogging {
   import DeviceGroupQueryNatural._
@@ -77,8 +77,8 @@ class DeviceGroupQueryNatural(
   }
 
   def receivedResponse(
-      device: ActorRef,
-      reading: DeviceGroup.TemperatureReading
+    device: ActorRef,
+    reading: DeviceGroup.TemperatureReading
   ): Unit = {
     context.unwatch(device)
 

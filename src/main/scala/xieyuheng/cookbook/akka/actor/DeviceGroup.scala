@@ -15,8 +15,8 @@ object DeviceGroup {
 
   case class RequestAllTemperatures(requestId: Long)
   case class RespondAllTemperatures(
-      requestId: Long,
-      temperatures: Map[String, TemperatureReading]
+    requestId: Long,
+    temperatures: Map[String, TemperatureReading]
   )
 
   trait TemperatureReading

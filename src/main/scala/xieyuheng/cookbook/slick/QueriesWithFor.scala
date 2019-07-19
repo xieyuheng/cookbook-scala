@@ -2,10 +2,9 @@ package xieyuheng.cookbook.slick
 
 object QueriesWithFor extends App {
   case class Department(
-      DepartmentId: Long,
-      DepartmentName: String,
-      Employees: List[Employee]
-  )
+    DepartmentId: Long,
+    DepartmentName: String,
+    Employees: List[Employee])
 
   case class Employee(EmployeeId: Long, LastName: String, Country: String)
 
@@ -17,17 +16,13 @@ object QueriesWithFor extends App {
         "Engineering",
         List(
           Employee(124, "Jones", "Australia"),
-          Employee(145, "Heisenberg", "Australia")
-        )
-      ),
+          Employee(145, "Heisenberg", "Australia"))),
       Department(
         34,
         "Clerical",
         List(
           Employee(201, "Robinson", "United States"),
-          Employee(305, "Smith", "Germany")
-        )
-      ),
+          Employee(305, "Smith", "Germany"))),
       Department(35, "Marketing", List())
     )
 

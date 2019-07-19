@@ -17,10 +17,10 @@ class DepartmentTable(tag: Tag) extends Table[Department](tag, "Department") {
 }
 
 case class Employee(
-    EmployeeId: Long,
-    LastName: String,
-    Country: String,
-    DepartmentId: Option[Long])
+  EmployeeId: Long,
+  LastName: String,
+  Country: String,
+  DepartmentId: Option[Long])
 
 class EmployeeTable(tag: Tag) extends Table[Employee](tag, "Employee") {
   def EmployeeId = column[Long]("EmployeeId", O.PrimaryKey)
@@ -43,21 +43,19 @@ class EmployeeTable(tag: Tag) extends Table[Employee](tag, "Employee") {
 }
 
 object joinPracticesData {
-  def departments =
-    Set(
-      Department(31, "Sales"),
-      Department(33, "Engineering"),
-      Department(34, "Clerical"),
-      Department(35, "Marketing"))
+  def departments = Set(
+    Department(31, "Sales"),
+    Department(33, "Engineering"),
+    Department(34, "Clerical"),
+    Department(35, "Marketing"))
 
-  def employees =
-    Set(
-      Employee(123, "Rafferty", "Australia", Some(31)),
-      Employee(124, "Jones", "Australia", Some(33)),
-      Employee(145, "Heisenberg", "Australia", Some(33)),
-      Employee(201, "Robinson", "United States", Some(34)),
-      Employee(305, "Smith", "Germany", Some(34)),
-      Employee(306, "Williams", "Germany", None))
+  def employees = Set(
+    Employee(123, "Rafferty", "Australia", Some(31)),
+    Employee(124, "Jones", "Australia", Some(33)),
+    Employee(145, "Heisenberg", "Australia", Some(33)),
+    Employee(201, "Robinson", "United States", Some(34)),
+    Employee(305, "Smith", "Germany", Some(34)),
+    Employee(306, "Williams", "Germany", None))
 }
 
 object JoinPracticesApp extends App {

@@ -9,7 +9,7 @@ import scala.util.{Failure, Success}
 case class Message(sender: String, content: String, id: Long = 0L)
 
 class MessageTable(
-    tag: Tag
+  tag: Tag
 ) extends Table[Message](tag, "Message") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def sender = column[String]("sender")

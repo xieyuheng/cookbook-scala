@@ -17,18 +17,18 @@ object DeviceGroupQuery {
   case object CollectionTimeout
 
   def props(
-      deviceIdMap: Map[ActorRef, String],
-      requestId: Long,
-      requester: ActorRef,
-      timeout: FiniteDuration
-  ) = Props(new DeviceGroupQuery(deviceIdMap, requestId, requester, timeout))
-}
-
-class DeviceGroupQuery(
     deviceIdMap: Map[ActorRef, String],
     requestId: Long,
     requester: ActorRef,
     timeout: FiniteDuration
+  ) = Props(new DeviceGroupQuery(deviceIdMap, requestId, requester, timeout))
+}
+
+class DeviceGroupQuery(
+  deviceIdMap: Map[ActorRef, String],
+  requestId: Long,
+  requester: ActorRef,
+  timeout: FiniteDuration
 ) extends Actor
     with ActorLogging {
   import DeviceGroupQuery._
@@ -50,8 +50,8 @@ class DeviceGroupQuery(
     waitingForReplies(Map.empty, deviceIdMap.keySet)
 
   def waitingForReplies(
-      repliesSoFar: Map[String, DeviceGroup.TemperatureReading],
-      stillWaiting: Set[ActorRef]
+    repliesSoFar: Map[String, DeviceGroup.TemperatureReading],
+    stillWaiting: Set[ActorRef]
   ): Receive = {
     case Device.RespondTemperature(0, option) =>
       val device = sender()
@@ -82,10 +82,10 @@ class DeviceGroupQuery(
   }
 
   def receivedResponse(
-      device: ActorRef,
-      reading: DeviceGroup.TemperatureReading,
-      repliesSoFar: Map[String, DeviceGroup.TemperatureReading],
-      stillWaiting: Set[ActorRef]
+    device: ActorRef,
+    reading: DeviceGroup.TemperatureReading,
+    repliesSoFar: Map[String, DeviceGroup.TemperatureReading],
+    stillWaiting: Set[ActorRef]
   ): Unit = {
     context.unwatch(device)
 
