@@ -28,6 +28,7 @@ object factorials extends App {
   //     system.terminate()
   //   }
 
+  // Reusable Pieces
   // def lineSink(filename: String): Sink[String, Future[IOResult]] =
   //   Flow[String]
   //     .map(s => ByteString(s + "\n"))
@@ -43,7 +44,18 @@ object factorials extends App {
   //     system.terminate()
   //   }
 
+  // factorials
+  //   .runForeach(println)
+  //   .onComplete { case (result) =>
+  //     println(result)
+  //     system.terminate()
+  //   }
+
+  // we are in fact dealing with streams that can flow at a certain speed:
+  //   we use the throttle operator to slow down the stream to 1 element per second.
   factorials
+    .zipWith(Source(0 to 100)) { case (num, idx) => s"$idx! = $num" }
+    .throttle(1, 1.second)
     .runForeach(println)
     .onComplete { case (result) =>
       println(result)
