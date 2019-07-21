@@ -18,21 +18,21 @@ final case class Tweet(author: Author, timestamp: Long, body: String) {
 }
 
 object reactiveTweets extends App {
-  val tweets: Source[Tweet, NotUsed] = Source(
-    Tweet(Author("rolandkuhn"), System.currentTimeMillis, "#akka rocks!") ::
-      Tweet(Author("patriknw"), System.currentTimeMillis, "#akka !") ::
-      Tweet(Author("bantonsson"), System.currentTimeMillis, "#akka !") ::
-      Tweet(Author("drewhk"), System.currentTimeMillis, "#akka !") ::
-      Tweet(Author("ktosopl"), System.currentTimeMillis, "#akka on the rocks!") ::
-      Tweet(Author("mmartynas"), System.currentTimeMillis, "wow #akka !") ::
-      Tweet(Author("akkateam"), System.currentTimeMillis, "#akka rocks!") ::
-      Tweet(Author("bananaman"), System.currentTimeMillis, "#bananas rock!") ::
-      Tweet(Author("appleman"), System.currentTimeMillis, "#apples rock!") ::
-      Tweet(Author("drama"), System.currentTimeMillis, "we compared #apples to #oranges!") ::
-      Nil)
+  val tweets: Source[Tweet, NotUsed] = Source(List(
+    Tweet(Author("rolandkuhn"), System.currentTimeMillis, "#akka rocks!"),
+    Tweet(Author("patriknw"), System.currentTimeMillis, "#akka !"),
+    Tweet(Author("bantonsson"), System.currentTimeMillis, "#akka !"),
+    Tweet(Author("drewhk"), System.currentTimeMillis, "#akka !"),
+    Tweet(Author("ktosopl"), System.currentTimeMillis, "#akka on the rocks!"),
+    Tweet(Author("mmartynas"), System.currentTimeMillis, "wow #akka !"),
+    Tweet(Author("akkateam"), System.currentTimeMillis, "#akka rocks!"),
+    Tweet(Author("bananaman"), System.currentTimeMillis, "#bananas rock!"),
+    Tweet(Author("appleman"), System.currentTimeMillis, "#apples rock!"),
+    Tweet(Author("drama"), System.currentTimeMillis, "we compared #apples to #oranges!")))
 
   implicit val system = ActorSystem("reactiveTweets")
   implicit val materializer = ActorMaterializer()
+  implicit val ctx = system.dispatcher
 
   tweets
     .map(_.hashtags) // Get all sets of hashtags ...
@@ -40,4 +40,8 @@ object reactiveTweets extends App {
     .mapConcat(identity) // Flatten the set of hashtags to a stream of hashtags
     .map(_.name.toUpperCase) // Convert all hashtags to upper case
     .runWith(Sink.foreach(println)) // Attach the Flow to a Sink that will finally print the hashtags
+    .onComplete { case (result) =>
+      println(result)
+      system.terminate()
+    }
 }

@@ -8,7 +8,6 @@ import akka.stream.scaladsl.{ Source, Sink, Flow, Keep, RunnableGraph, FileIO }
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
-import java.nio.file.Paths
 
 object littleGauss extends App {
   implicit val system = ActorSystem("littleGauss")
