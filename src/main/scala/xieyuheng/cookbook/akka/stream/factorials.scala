@@ -35,8 +35,9 @@ object factorials extends App {
 
   // factorials
   //   .map(_.toString)
-  //   .toMat(lineSink("factorials.txt"))(Keep.right)
-  //   .run()
+  // // .toMat(lineSink("factorials.txt"))(Keep.right)
+  // // .run()
+  //   .runWith(lineSink("factorials.txt"))
   //   .onComplete { case (result) =>
   //     println(result)
   //     system.terminate()
@@ -48,4 +49,5 @@ object factorials extends App {
       println(result)
       system.terminate()
     }
+
 }
