@@ -22,10 +22,16 @@ object littleGauss extends App {
       .via(flow)
       .toMat(sink)(Keep.right)
 
-  runnable
-    .run()
-    .onComplete { case (result) =>
-      println(result)
-      system.terminate()
-    }
+//   runnable
+//     .run()
+//     .onComplete { case (result) =>
+//       println(result)
+//       system.terminate()
+//     }
+
+  println(
+    Source.single(1)
+      .runWith(Sink.seq)
+      .onComplete(println)
+  )
 }
