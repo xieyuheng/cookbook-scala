@@ -1,0 +1,18 @@
+#+title: scala note
+
+* Four Essential effects in programming
+
+  |              | One       | Many          |
+  |--------------+-----------+---------------|
+  | Synchronous  | T/Try[T]  | Iterable[T]   |
+  | Asynchronous | Future[T] | Observable[T] |
+
+  - Future[T] is roughly Try[T] => Unit
+    which is the dual of Try[T]
+
+  - Iterable[T] is roughly next: Unit => Try[Option[T]]
+    its dual is Observable
+
+  - Erik Meijer/Reactive Programming
+    - video: https://class.coursera.org/reactive-001/lecture/61
+    - slides: https://d396qusza40orc.cloudfront.net/reactive/lecture_slides/week4-1.pdf
