@@ -11,7 +11,7 @@ import scala.util.{ Failure, Success }
 import java.nio.file.Paths
 
 object specialFirst extends App {
-  implicit val system = ActorSystem("factorials")
+  implicit val system = ActorSystem("specialFirst")
   implicit val mat = ActorMaterializer()
   implicit val ctx = system.dispatcher
 
