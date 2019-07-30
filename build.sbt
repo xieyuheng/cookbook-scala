@@ -6,6 +6,16 @@ lazy val akkaVersion = "2.5.23"
 lazy val akkaHttpVersion = "10.1.9"
 lazy val slickVersion = "3.3.1"
 
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-encoding", "UTF-8",
+  "-unchecked",
+  "-feature",
+  // "-language:implicitConversions",
+    "-Ywarn-dead-code",
+  // "-Xfatal-warnings",
+)
+
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
@@ -18,14 +28,4 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "io.spray" %% "spray-json" % "1.3.5",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-)
-
-scalacOptions ++= Seq(
-  //   "-deprecation",
-  //   "-encoding", "UTF-8",
-  //   "-unchecked",
-  "-feature"
-  //   "-language:implicitConversions",
-  //   "-Ywarn-dead-code",
-  //   "-Xfatal-warnings"
 )
