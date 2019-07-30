@@ -14,5 +14,9 @@
     its dual is Observable
 
   - Erik Meijer/Reactive Programming
-    - video: https://class.coursera.org/reactive-001/lecture/61
+
+    - video:
+      - https://class.coursera.org/reactive-001/lecture/61
+      - https://www.youtube.com/playlist?list=PLMhMDErmC1TdBMxd3KnRfYiBV2ELvLyxN
+
     - slides: https://d396qusza40orc.cloudfront.net/reactive/lecture_slides/week4-1.pdf
