@@ -1,4 +1,4 @@
-package xieyuheng.cookbook.akka
+package xieyuheng.cookbook.akka.http
 
 import scala.concurrent.{ExecutionContext, Future, blocking}
 import scala.util.{Failure, Success}
@@ -15,10 +15,7 @@ import HttpProtocols._
 object WebClientDida extends App {
   implicit val system = ActorSystem()
   implicit val materializer = ActorMaterializer()
-  // needed for the future flatMap/onComplete in the end
-  implicit val executionContext: ExecutionContext =
-    // ExecutionContext.global
-    system.dispatcher
+  implicit val executionContext = system.dispatcher
 
   val response: Future[HttpResponse] =
     Http().singleRequest(

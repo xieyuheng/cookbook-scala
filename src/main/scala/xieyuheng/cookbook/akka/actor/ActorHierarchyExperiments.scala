@@ -1,4 +1,4 @@
-package xieyuheng.cookbook.akka
+package xieyuheng.cookbook.akka.actor
 
 import akka.actor.{Actor, ActorSystem, Props}
 import scala.io.StdIn

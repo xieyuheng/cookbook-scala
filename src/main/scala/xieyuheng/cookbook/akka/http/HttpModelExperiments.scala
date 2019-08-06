@@ -1,4 +1,4 @@
-package xieyuheng.cookbook.akka
+package xieyuheng.cookbook.akka.http
 
 import akka.http.scaladsl.model._
 import HttpMethods._

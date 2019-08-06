@@ -1,4 +1,4 @@
-package xieyuheng.cookbook.akka
+package xieyuheng.cookbook.akka.http
 
 import akka.actor.ActorSystem
 import akka.stream.scaladsl._

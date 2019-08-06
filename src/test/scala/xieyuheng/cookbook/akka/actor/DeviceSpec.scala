@@ -1,4 +1,4 @@
-package xieyuheng.cookbook.akka
+package xieyuheng.cookbook.akka.actor
 
 import org.scalatest.{BeforeAndAfterAll, WordSpecLike, Matchers}
 import akka.actor.ActorSystem
