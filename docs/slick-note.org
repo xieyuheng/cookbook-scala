@@ -2,6 +2,12 @@
 
 - slick provides collection-like API for relational databases
 
+* [note] object mapping
+
+  - slick does not help you make id to nested list
+
+  - slick stores id, similar to the database
+
 * 1 Basics
 
   - query -- collection-like API
