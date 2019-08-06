@@ -11,20 +11,13 @@ object QueriesWithFor extends App {
   def departments =
     Set(
       Department(31, "Sales", List(Employee(123, "Rafferty", "Australia"))),
-      Department(
-        33,
-        "Engineering",
-        List(
-          Employee(124, "Jones", "Australia"),
-          Employee(145, "Heisenberg", "Australia"))),
-      Department(
-        34,
-        "Clerical",
-        List(
-          Employee(201, "Robinson", "United States"),
-          Employee(305, "Smith", "Germany"))),
-      Department(35, "Marketing", List())
-    )
+      Department(33, "Engineering", List(
+        Employee(124, "Jones", "Australia"),
+        Employee(145, "Heisenberg", "Australia"))),
+      Department(34, "Clerical", List(
+        Employee(201, "Robinson", "United States"),
+        Employee(305, "Smith", "Germany"))),
+      Department(35, "Marketing", List()))
 
   val result = for {
     d <- departments

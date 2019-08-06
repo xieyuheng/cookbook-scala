@@ -27,13 +27,10 @@ object WebServerStream {
     val route =
       path("random") {
         get {
-          complete(
-            HttpEntity(
-              ContentTypes.`text/plain(UTF-8)`,
-              // transform each number to a chunk of bytes
-              numbers.map(n => ByteString(s"$n\n"))
-            )
-          )
+          complete(HttpEntity(
+            ContentTypes.`text/plain(UTF-8)`,
+            // transform each number to a chunk of bytes
+            numbers.map(n => ByteString(s"$n\n"))))
         }
       }
 
