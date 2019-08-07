@@ -8,9 +8,9 @@ lazy val akkaHttpVersion = "10.1.9"
 lazy val slickVersion = "3.3.1"
 
 scalacOptions ++= Seq(
-  "-opt:l:method",
-  "-opt:l:inline",
-  "-opt-inline-from:**",
+  // "-opt:l:method",
+  // "-opt:l:inline",
+  // "-opt-inline-from:**",
   "-deprecation",
   "-encoding", "UTF-8",
   "-unchecked",
