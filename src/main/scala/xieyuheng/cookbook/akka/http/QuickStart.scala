@@ -4,11 +4,10 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.io.StdIn
@@ -40,11 +39,13 @@ object QuickStartApp extends App {
       get {
         complete(User("xie", "yuheng", 400))
       }
-    } ~ path("yu") {
+    } ~
+    path("yu") {
       get {
         complete(User("yu", "hengxie", 300))
       }
-    } ~ path("heng") {
+    } ~
+    path("heng") {
       get {
         complete(User("heng", "yuxie", 200))
       }
