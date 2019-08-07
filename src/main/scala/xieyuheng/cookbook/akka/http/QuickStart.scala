@@ -30,7 +30,7 @@ object User {
 }
 
 object QuickStartApp extends App {
-  implicit val system = ActorSystem("QuickStart")
+  implicit val system = ActorSystem("QuickStartApp")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
 
