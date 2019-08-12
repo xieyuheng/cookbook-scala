@@ -1,6 +1,6 @@
 package xieyuheng.cookbook.slick
 
-import slick.jdbc.MySQLProfile.api._
+import slick.jdbc.PostgresProfile.api._
 import slick.model.{ForeignKeyAction}
 import scala.concurrent.{Future, Await, blocking}
 import scala.concurrent.duration._
@@ -28,6 +28,9 @@ class EmployeeTable(tag: Tag) extends Table[Employee](tag, "Employee") {
   def Country = column[String]("Country")
   def DepartmentId = column[Long]("DepartmentId")
 
+  def DepartmentFk =
+    foreignKey("DepartmentFk", DepartmentId, TableQuery[DepartmentTable])(_.DepartmentId, onDelete = ForeignKeyAction.Cascade)
+
   def * =
     (
       EmployeeId,
@@ -35,11 +38,6 @@ class EmployeeTable(tag: Tag) extends Table[Employee](tag, "Employee") {
       Country,
       DepartmentId.?
     ).mapTo[Employee]
-
-  def DepartmentFk =
-    foreignKey("DepartmentFk", DepartmentId, TableQuery[DepartmentTable])(
-      _.DepartmentId,
-      onDelete = ForeignKeyAction.Cascade)
 }
 
 object joinPracticesData {
@@ -55,31 +53,28 @@ object joinPracticesData {
     Employee(145, "Heisenberg", "Australia", Some(33)),
     Employee(201, "Robinson", "United States", Some(34)),
     Employee(305, "Smith", "Germany", Some(34)),
-    Employee(306, "Williams", "Germany", None))
+    // Employee(306, "Williams", "Germany", None)
+  )
 }
 
 object JoinPracticesApp extends App {
   def initDepartmentTable =
     for {
-      tryCreate <- TableQuery[DepartmentTable].schema.create.asTry
       deleted <- TableQuery[DepartmentTable].delete
       inserted <- TableQuery[DepartmentTable] ++= joinPracticesData.departments
     } yield (
       "DepartmentTable",
       Map(
-        "tryCreate" -> tryCreate,
         "deleted" -> deleted,
         "inserted" -> inserted))
 
   def initEmployeeTable =
     for {
-      tryCreate <- TableQuery[EmployeeTable].schema.create.asTry
       deleted <- TableQuery[EmployeeTable].delete
       inserted <- TableQuery[EmployeeTable] ++= joinPracticesData.employees
     } yield (
       "EmployeeTable",
       Map(
-        "tryCreate" -> tryCreate,
         "deleted" -> deleted,
         "inserted" -> inserted))
 
@@ -119,17 +114,21 @@ object JoinPracticesApp extends App {
   val db = Database.forConfig("CookbookSlick")
 
   db.run(
-      for {
-        i1 <- initDepartmentTable
-        i2 <- initEmployeeTable
-        cross <- crossJoin.result
-        inner <- innerJoin.result
-        left <- leftJoin.result
-        right <- rightJoin.result
-        self <- selfJoin.result
-        monadic <- monadicJoin.result
-      } yield (i1, i2, cross, inner, left, right, self, monadic)
-    )
+    for {
+      _ <- TableQuery[DepartmentTable].schema.create.asTry
+      _ <- TableQuery[EmployeeTable].schema.create.asTry
+
+      i1 <- initDepartmentTable
+      i2 <- initEmployeeTable
+
+      cross <- crossJoin.result
+      inner <- innerJoin.result
+      left <- leftJoin.result
+      right <- rightJoin.result
+      self <- selfJoin.result
+      monadic <- monadicJoin.result
+    } yield (i1, i2, cross, inner, left, right, self, monadic)
+  )
     .onComplete {
       case Success((i1, i2, cross, inner, left, right, self, monadic)) => {
         println((i1, i2))

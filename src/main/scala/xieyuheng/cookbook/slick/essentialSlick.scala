@@ -1,6 +1,6 @@
 package xieyuheng.cookbook.slick
 
-import slick.jdbc.MySQLProfile.api._
+import slick.jdbc.PostgresProfile.api._
 import scala.concurrent.{Future, Await, blocking}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
